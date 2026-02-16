@@ -2,9 +2,41 @@
 
 Comece a usar o MCP GitHub Project Manager em 5 minutos.
 
-## Passo 1: Preparar o Repositório GitHub
+## Opção 1: Inicialização Automática (Recomendado)
 
-Seu repositório de projeto deve ter a seguinte estrutura mínima:
+Use a ferramenta `init_project` para analisar um repositório existente e criar toda a estrutura de memória automaticamente.
+
+### Passo 1: Crie um repositório vazio no GitHub para ser sua memória.
+
+### Passo 2: Configure o MCP
+
+Siga os passos de configuração do MCP (clone, instale dependências, configure `.env` com o token e o **repositório de memória**).
+
+### Passo 3: Execute o Comando de Inicialização
+
+Use o Claude Desktop ou outra ferramenta MCP para executar:
+
+```json
+{
+  "tool": "init_project",
+  "arguments": {
+    "target_owner": "usuario_do_projeto_alvo",
+    "target_repo": "repositorio_do_projeto_alvo"
+  }
+}
+```
+
+O MCP irá analisar o projeto alvo e preencher seu repositório de memória com toda a documentação e estrutura necessária.
+
+---
+
+## Opção 2: Configuração Manual
+
+Se preferir configurar a estrutura manualmente:
+
+### Passo 1: Preparar o Repositório de Memória
+
+Crie um repositório no GitHub com a seguinte estrutura mínima:
 
 ```
 seu-repositorio/
@@ -29,7 +61,7 @@ seu-repositorio/
 }
 ```
 
-## Passo 2: Obter Token de Acesso Pessoal do GitHub
+### Passo 2: Obter Token de Acesso Pessoal do GitHub
 
 1. Vá para [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
 2. Clique em "Generate new token (classic)"
@@ -37,7 +69,7 @@ seu-repositorio/
 4. Clique em "Generate token"
 5. **Copie o token** (você não poderá vê-lo novamente)
 
-## Passo 3: Clonar e Configurar o MCP
+### Passo 3: Clonar e Configurar o MCP
 
 ```bash
 # Clone o repositório do MCP
@@ -60,7 +92,7 @@ nano .env
 npm run build
 ```
 
-## Passo 4: Iniciar o Servidor
+### Passo 4: Iniciar o Servidor
 
 ```bash
 npm start
@@ -68,7 +100,7 @@ npm start
 
 O servidor está pronto para receber requisições MCP.
 
-## Passo 5: Usar com Claude Desktop
+### Passo 5: Usar com Claude Desktop
 
 1. Localize o arquivo de configuração do Claude Desktop:
    - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`

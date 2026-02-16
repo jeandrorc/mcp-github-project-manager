@@ -96,6 +96,7 @@ O servidor expõe um conjunto de ferramentas para interagir com o repositório G
 | `search_content`   | Busca por uma string de texto nos arquivos.               | `query: string`, `path: string` (opcional)       |
 | `get_project_info` | Retorna o conteúdo do arquivo `config.json`.              | Nenhum                                           |
 | `update_config`    | Atualiza um par chave/valor no arquivo `config.json`.     | `key: string`, `value: any`                      |
+| `init_project`     | Inicializa a estrutura de memória analisando um repositório. | `target_owner: string` (opcional), `target_repo: string` (opcional) |
 
 ### Exemplos de Uso
 
@@ -146,6 +147,24 @@ Uma mensagem de sucesso com o link para o commit de criação do arquivo.
 
 **Resultado esperado:**
 Uma mensagem confirmando que a configuração foi atualizada e o `config.json` no repositório refletirá a nova versão.
+
+### Usando a Ferramenta de Inicialização (init_project)
+
+Para configurar automaticamente um repositório de memória com base em um projeto existente, use a ferramenta `init_project`.
+
+**Comando:**
+```json
+{
+  "tool": "init_project",
+  "arguments": {
+    "target_owner": "nome_do_usuario_do_projeto",
+    "target_repo": "nome_do_repositorio_do_projeto"
+  }
+}
+```
+
+**Resultado esperado:**
+Um relatório em JSON detalhando o tipo de projeto detectado, as tecnologias, e a lista de todos os arquivos de documentação e configuração que foram criados automaticamente.
 
 #### Listar todos os documentos de arquitetura
 

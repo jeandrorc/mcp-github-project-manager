@@ -6,6 +6,8 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { GitHubProjectManager } from "./github-manager.js";
+import { ProjectDetector } from "./project-detector.js";
+import { StructureGenerator } from "./structure-generator.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -178,6 +180,24 @@ const tools: Tool[] = [
       required: ["path", "message"],
     },
   },
+  {
+    name: "init_project",
+    description: "Initialize project memory structure based on detected project type. Analyzes the repository and creates a complete documentation structure with templates.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        target_owner: {
+          type: "string",
+          description: "GitHub owner/organization of the project to analyze (optional, uses current repo if not provided)",
+        },
+        target_repo: {
+          type: "string",
+          description: "GitHub repository name to analyze (optional, uses current repo if not provided)",
+        },
+      },
+      required: [],
+    },
+  },
 ];
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -300,6 +320,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: "text" as const,
               text: result,
+            },
+          ],
+        };
+      }
+
+      case "init_project": {
+        const targetOwner = (args.target_owner as string) || process.env.GITHUB_OWNER!;
+        const targetRepo = (args.target_repo as string) || process.env.GITHUB_REPO!;
+
+        // Detect project type
+        const detector = new ProjectDetector(
+          process.env.GITHUB_TOKEN!,
+          targetOwner,
+          targetRepo
+        );
+        const projectInfo = await detector.detectProject();
+
+        // Generate structure
+        const generator = new StructureGenerator(manager);
+        const createdFiles = await generator.generateStructure(projectInfo);
+
+        const result = {
+          success: true,
+          project_type: projectInfo.type,
+          detected_technologies: projectInfo.technologies,
+          files_created: createdFiles,
+          next_steps: [
+            "Review and customize config.json",
+            "Add team members to team/members.json",
+            "Update docs with project-specific information",
+            "Document architecture decisions in decisions/adr/",
+          ],
+        };
+
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify(result, null, 2),
             },
           ],
         };
