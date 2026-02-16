@@ -182,6 +182,21 @@ Um relatório em JSON detalhando o tipo de projeto detectado, as tecnologias, e 
 **Resultado esperado:**
 Uma lista em formato JSON de todos os arquivos e pastas dentro do diretório `decisions/adr`.
 
+## Guias e Recursos
+
+### 📚 Documentação Completa
+
+- **[PROMPTS_GUIDE.md](PROMPTS_GUIDE.md)** - Guia completo de prompts e exemplos de uso com ferramentas de IA
+- **[INTEGRATION_AI_TOOLS.md](INTEGRATION_AI_TOOLS.md)** - Instruções detalhadas para integrar com Claude Desktop, GitHub Copilot, Cursor e outras ferramentas
+- **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** - Guia técnico de integração e casos de uso avançados
+- **[example-repo-structure.md](example-repo-structure.md)** - Estrutura recomendada para repositórios de projeto
+
+### 🎯 Começando Rápido
+
+1. **Iniciantes**: Leia o [QUICKSTART.md](QUICKSTART.md) para configurar em 5 minutos
+2. **Desenvolvedores**: Consulte o [PROMPTS_GUIDE.md](PROMPTS_GUIDE.md) para aprender a usar com sua ferramenta de IA favorita
+3. **Integradores**: Veja o [INTEGRATION_AI_TOOLS.md](INTEGRATION_AI_TOOLS.md) para configurar com Claude Desktop, Copilot ou Cursor
+
 ## Estrutura do Repositório de Projeto
 
 Para obter o máximo deste MCP, recomendamos organizar seu repositório de projeto de forma estruturada. Fornecemos um guia de exemplo em `example-repo-structure.md` que detalha uma estrutura de pastas e arquivos recomendada.
