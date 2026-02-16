@@ -24,6 +24,44 @@ Este servidor transforma seu repositório em uma fonte de verdade estruturada, p
 - **Relatórios Automatizados**: Gerar relatórios de status do projeto a partir de dados armazenados no repositório.
 - **Integração com Agentes de IA**: Permitir que um agente de IA acesse o contexto do projeto para responder a perguntas ou realizar tarefas.
 
+## Arquitetura de Múltiplos Projetos
+
+Este MCP agora suporta o gerenciamento de múltiplos projetos com uma única instalação, usando um repositório de memória centralizado e **namespaces**.
+
+### Como Funciona
+
+1.  **Configuração Global**: Você configura um único repositório de memória central onde toda a documentação será armazenada.
+2.  **Configuração Local**: Em cada um dos seus projetos de trabalho, você cria um arquivo `.mcp-config.json` que define um `namespace` (uma pasta) para aquele projeto.
+3.  **Operação**: Todas as operações (leitura, escrita, etc.) são automaticamente direcionadas para a pasta correta dentro do seu repositório de memória central.
+
+> 📚 **Leia mais**: [docs/NAMESPACE_ARCHITECTURE.md](docs/NAMESPACE_ARCHITECTURE.md) para um guia completo da nova arquitetura.
+
+### Exemplo de Estrutura
+
+**Repositório de Memória (`memoria-central`):**
+```
+memoria-central/
+├── meu-app-react/
+│   └── docs/
+└── meu-servico-node/
+    └── docs/
+```
+
+**Seu Projeto (`meu-app-react`):**
+```
+meu-app-react/
+├── .mcp-config.json  // -> { "namespace": "meu-app-react" }
+└── src/
+```
+
+### CLI: `mcp-github`
+
+Uma nova ferramenta de linha de comando foi adicionada para facilitar a configuração:
+
+- `mcp-github init`: Configura o repositório de memória global.
+- `mcp-github init-project`: Cria o arquivo de configuração local no seu projeto.
+- `mcp-github config`: Mostra a configuração ativa.
+
 ## Começando
 
 ### Pré-requisitos

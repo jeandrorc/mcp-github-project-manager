@@ -8,23 +8,27 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { GitHubProjectManager } from "./github-manager.js";
 import { ProjectDetector } from "./project-detector.js";
 import { StructureGenerator } from "./structure-generator.js";
+import { ConfigLoader } from "./config-loader.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Validate environment variables
-const requiredEnvVars = ["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO"];
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
-    process.exit(1);
+// Load configuration (local, env vars, or global)
+let config;
+try {
+  config = ConfigLoader.loadConfig();
+} catch (error) {
+  if (error instanceof Error) {
+    console.error(`Configuration error: ${error.message}`);
   }
+  process.exit(1);
 }
 
 const manager = new GitHubProjectManager(
-  process.env.GITHUB_TOKEN!,
-  process.env.GITHUB_OWNER!,
-  process.env.GITHUB_REPO!
+  config.github_token,
+  config.github_owner,
+  config.github_repo,
+  config.namespace  // Pass namespace to manager
 );
 
 const server = new Server(

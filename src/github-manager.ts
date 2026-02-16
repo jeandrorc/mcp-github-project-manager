@@ -21,11 +21,25 @@ export class GitHubProjectManager {
   private octokit: Octokit;
   private owner: string;
   private repo: string;
+  private namespace: string;
 
-  constructor(token: string, owner: string, repo: string) {
+  constructor(token: string, owner: string, repo: string, namespace?: string) {
     this.octokit = new Octokit({ auth: token });
     this.owner = owner;
     this.repo = repo;
+    this.namespace = namespace || ""; // Empty string means root of repo
+  }
+
+  /**
+   * Prepend namespace to path if namespace is set
+   */
+  private resolvePath(path: string): string {
+    if (!this.namespace) {
+      return path;
+    }
+    // Remove leading slash if present
+    const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+    return `${this.namespace}/${cleanPath}`;
   }
 
   /**
@@ -33,10 +47,11 @@ export class GitHubProjectManager {
    */
   async readFile(filePath: string): Promise<string> {
     try {
+      const resolvedPath = this.resolvePath(filePath);
       const response = await this.octokit.repos.getContent({
         owner: this.owner,
         repo: this.repo,
-        path: filePath,
+        path: resolvedPath,
       });
 
       if (Array.isArray(response.data)) {
@@ -69,13 +84,14 @@ export class GitHubProjectManager {
     message: string
   ): Promise<string> {
     try {
+      const resolvedPath = this.resolvePath(filePath);
       // Try to get existing file to get its SHA
       let sha: string | undefined;
       try {
         const existing = await this.octokit.repos.getContent({
           owner: this.owner,
           repo: this.repo,
-          path: filePath,
+          path: resolvedPath,
         });
 
         if (!Array.isArray(existing.data) && "sha" in existing.data) {
@@ -88,7 +104,7 @@ export class GitHubProjectManager {
       const response = await this.octokit.repos.createOrUpdateFileContents({
         owner: this.owner,
         repo: this.repo,
-        path: filePath,
+        path: resolvedPath,
         message: message,
         content: Buffer.from(content).toString("base64"),
         ...(sha && { sha }),
@@ -112,12 +128,13 @@ export class GitHubProjectManager {
     message: string
   ): Promise<string> {
     try {
+      const resolvedPath = this.resolvePath(filePath);
       // Check if file already exists
       try {
         await this.octokit.repos.getContent({
           owner: this.owner,
           repo: this.repo,
-          path: filePath,
+          path: resolvedPath,
         });
         throw new Error("File already exists");
       } catch (error) {
@@ -130,7 +147,7 @@ export class GitHubProjectManager {
       const response = await this.octokit.repos.createOrUpdateFileContents({
         owner: this.owner,
         repo: this.repo,
-        path: filePath,
+        path: resolvedPath,
         message: message,
         content: Buffer.from(content).toString("base64"),
       });
@@ -149,10 +166,11 @@ export class GitHubProjectManager {
    */
   async deleteFile(filePath: string, message: string): Promise<string> {
     try {
+      const resolvedPath = this.resolvePath(filePath);
       const existing = await this.octokit.repos.getContent({
         owner: this.owner,
         repo: this.repo,
-        path: filePath,
+        path: resolvedPath,
       });
 
       if (Array.isArray(existing.data)) {
@@ -166,7 +184,7 @@ export class GitHubProjectManager {
       const response = await this.octokit.repos.deleteFile({
         owner: this.owner,
         repo: this.repo,
-        path: filePath,
+        path: resolvedPath,
         message: message,
         sha: existing.data.sha,
       });
@@ -185,10 +203,11 @@ export class GitHubProjectManager {
    */
   async listFiles(dirPath: string = "", recursive: boolean = false): Promise<FileInfo[]> {
     try {
+      const resolvedPath = this.resolvePath(dirPath);
       const response = await this.octokit.repos.getContent({
         owner: this.owner,
         repo: this.repo,
-        path: dirPath,
+        path: resolvedPath,
       });
 
       if (!Array.isArray(response.data)) {
@@ -230,8 +249,9 @@ export class GitHubProjectManager {
     searchPath?: string
   ): Promise<SearchResult[]> {
     try {
-      const searchQuery = searchPath
-        ? `${query} in:file path:${searchPath}`
+      const resolvedSearchPath = searchPath ? this.resolvePath(searchPath) : (this.namespace || undefined);
+      const searchQuery = resolvedSearchPath
+        ? `${query} in:file path:${resolvedSearchPath}`
         : `${query} in:file repo:${this.owner}/${this.repo}`;
 
       const response = await this.octokit.search.code({
