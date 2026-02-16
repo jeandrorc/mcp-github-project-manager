@@ -63,6 +63,9 @@ seu-repositorio/
 
 ### Passo 2: Obter Token de Acesso Pessoal do GitHub
 
+**🚀 Atalho Rápido**: [Clique aqui para gerar um token já com os escopos corretos](https://github.com/settings/tokens/new?description=MCP%20GitHub%20Project%20Manager&scopes=repo)
+
+Ou manualmente:
 1. Vá para [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
 2. Clique em "Generate new token (classic)"
 3. Selecione o escopo `repo` (acesso completo a repositórios privados)

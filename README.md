@@ -32,6 +32,10 @@ Este servidor transforma seu repositório em uma fonte de verdade estruturada, p
 - **Repositório GitHub**: Um repositório privado para ser usado como backend.
 - **Token de Acesso Pessoal (PAT)**: Um token do GitHub com permissões de `repo` para acessar o repositório.
 
+> 🔑 **Crie seu token agora**: [Clique aqui para gerar um token com os escopos corretos](https://github.com/settings/tokens/new?description=MCP%20GitHub%20Project%20Manager&scopes=repo)
+> 
+> 📚 Para mais detalhes sobre tokens, veja [docs/TOKEN_GENERATION.md](docs/TOKEN_GENERATION.md)
+
 ### Configuração
 
 1.  **Clone o repositório do servidor MCP (este projeto):**

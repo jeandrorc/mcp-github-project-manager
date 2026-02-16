@@ -2,6 +2,8 @@
 
 Este guia explica como integrar o MCP GitHub Project Manager em diferentes ambientes e ferramentas.
 
+> 🔑 **Antes de começar**: [Gere seu token do GitHub com os escopos corretos](https://github.com/settings/tokens/new?description=MCP%20GitHub%20Project%20Manager&scopes=repo)
+
 ## Integração com Claude Desktop
 
 O MCP GitHub Project Manager pode ser integrado com o Claude Desktop para permitir que o Claude acesse e modifique informações do seu projeto diretamente.

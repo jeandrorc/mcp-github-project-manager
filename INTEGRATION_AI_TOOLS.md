@@ -2,6 +2,8 @@
 
 Este guia detalha como integrar o **MCP GitHub Project Manager** com várias ferramentas de desenvolvimento assistidas por IA, como Claude Desktop, GitHub Copilot, Cursor e outras.
 
+> 🔑 **Passo 0**: [Gere seu token do GitHub agora (link direto com escopos pré-configurados)](https://github.com/settings/tokens/new?description=MCP%20GitHub%20Project%20Manager&scopes=repo)
+
 ## 1. Claude Desktop (Integração Direta)
 
 O Claude Desktop é a maneira mais poderosa de usar este MCP, pois oferece suporte nativo ao Model Context Protocol.
